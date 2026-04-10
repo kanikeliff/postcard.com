@@ -1,52 +1,41 @@
 /**
- * EmailJS ile site içinden e-posta gönderme
- *
- * Kurulum:
- * 1. npm install @emailjs/browser
- * 2. emailjs.com → üye ol → Email Service ekle → Email Template oluştur
- * 3. .env dosyasına aşağıdaki değerleri gir (aşağıya bak)
+ * E-posta gönderme — iki mod:
+ * 1. .env ayarlanmışsa → EmailJS ile site içinden gönderir
+ * 2. .env yoksa        → mailto: ile e-posta uygulamasını açar (fallback)
  */
-
-import emailjs from "@emailjs/browser";
 
 const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
 const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
 const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
-/**
- * Kartpostali alıcının e-posta adresine gönderir.
- * @param {import("../interfaces/postcard").Postcard} postcard
- * @returns {Promise<{success: boolean, message: string}>}
- */
+function mailtoFallback(postcard) {
+  const subject = encodeURIComponent(postcard.title || "Sana bir kartpostal var 💌");
+  const body = encodeURIComponent(postcard.content || "");
+  window.open(`mailto:${postcard.contact}?subject=${subject}&body=${body}`, "_blank");
+  return { success: true, message: "E-posta uygulaması açıldı ✉️" };
+}
+
 export async function sendPostcardEmail(postcard) {
+  // EmailJS kurulu değilse mailto ile aç
   if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
-    return {
-      success: false,
-      message: "EmailJS yapılandırması eksik. .env dosyasını kontrol et.",
-    };
+    return mailtoFallback(postcard);
   }
 
-  const templateParams = {
-    to_email: postcard.contact,
-    to_name: postcard.recipientName,
-    subject: postcard.title || "Sana bir kartpostal var 💌",
-    message: postcard.content,
-    theme: postcard.theme,
-    sent_at: new Date().toLocaleDateString("tr-TR", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    }),
-  };
-
   try {
-    await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
+    const emailjs = await import("@emailjs/browser");
+    await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+      to_email: postcard.contact,
+      to_name: postcard.recipientName,
+      subject: postcard.title || "Sana bir kartpostal var 💌",
+      message: postcard.content,
+      sent_at: new Date().toLocaleDateString("tr-TR", {
+        day: "numeric", month: "long", year: "numeric",
+      }),
+    }, PUBLIC_KEY);
     return { success: true, message: "Kartpostal başarıyla gönderildi! 💌" };
   } catch (error) {
     console.error("EmailJS error:", error);
-    return {
-      success: false,
-      message: "Gönderim başarısız. Lütfen tekrar deneyin.",
-    };
+    // EmailJS başarısız olursa yine mailto'ya düş
+    return mailtoFallback(postcard);
   }
 }
