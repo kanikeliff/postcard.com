@@ -23,6 +23,7 @@ export default function Header() {
         {user ? (
           <>
             <NavLink to="/" end className={navLink}>Home</NavLink>
+            <NavLink to="/inbox" className={navLink}>Inbox 📬</NavLink>
             <NavLink to="/sent" className={navLink}>Sent</NavLink>
             <NavLink to="/profile" className={navLink}>Profile</NavLink>
             <button
