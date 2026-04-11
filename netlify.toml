@@ -1,10 +1,9 @@
 [build]
   base    = "postcard-app"
   command = "npm run build"
-  publish = "postcard-app/dist"
+  publish = "dist"
 
 [[redirects]]
   from   = "/*"
   to     = "/index.html"
   status = 200
-  
