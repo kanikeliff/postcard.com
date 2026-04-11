@@ -2,6 +2,8 @@ import { supabase } from "../lib/supabase";
 import { createShareToken } from "../lib/utils";
 
 export async function createPostcard(payload) {
+  if (!supabase) throw new Error("Supabase is not configured. Please set environment variables.");
+  
   const shareToken = createShareToken();
   const now = new Date().toISOString();
 
@@ -35,6 +37,8 @@ export async function createPostcard(payload) {
 }
 
 export async function getPublicPostcardByToken(shareToken) {
+  if (!supabase) throw new Error("Supabase is not configured. Please set environment variables.");
+  
   const { data, error } = await supabase
     .from("postcards")
     .select("*")
@@ -47,6 +51,8 @@ export async function getPublicPostcardByToken(shareToken) {
 }
 
 export async function getSentPostcards(senderUserId) {
+  if (!supabase) return [];
+  
   let query = supabase
     .from("postcards")
     .select("*")
@@ -62,6 +68,8 @@ export async function getSentPostcards(senderUserId) {
 }
 
 export async function markPostcardAsRead(shareToken) {
+  if (!supabase) return;
+  
   const { error } = await supabase
     .from("postcards")
     .update({ status: "read", updated_at: new Date().toISOString() })
