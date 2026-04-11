@@ -1,4 +1,5 @@
 # Postcard — Friends Letter Sender App
+<img width="1061" height="788" alt="image" src="https://github.com/user-attachments/assets/8d3b672c-1468-42a5-ab1b-20aed301ed83" />
 
 ```
 ██████╗  ██████╗ ███████╗████████╗ ██████╗ █████╗ ██████╗ ██████╗
@@ -15,7 +16,7 @@
 > Create, preview, and send beautiful postcards via Email, WhatsApp, or SMS — no backend required.
 
 ---
-![Uploading image.png…]()
+
 
 ## 📁 File Structure
 
