@@ -1,4 +1,4 @@
-import Input from "./ui/Input";
+import Input from "../ui/Input";
 
 export default function DeliveryPanel({ recipientName, recipientEmail, errors, onChange }) {
   return (
