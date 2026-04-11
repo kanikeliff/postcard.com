@@ -2,13 +2,13 @@ import { supabase } from "../lib/supabase";
 import { createShareToken } from "../lib/utils";
 
 export async function createPostcard(payload) {
-  if (!supabase) throw new Error("Supabase is not configured. Please set environment variables.");
-  
   const shareToken = createShareToken();
   const now = new Date().toISOString();
+  const { data: { user } } = await supabase.auth.getUser();
 
   const record = {
-    sender_user_id: payload.senderUserId ?? null,
+    sender_user_id: user?.id ?? null,
+    sender_email: user?.email ?? null,
     recipient_name: payload.recipientName,
     recipient_email: payload.recipientEmail,
     title: payload.title,
@@ -37,8 +37,6 @@ export async function createPostcard(payload) {
 }
 
 export async function getPublicPostcardByToken(shareToken) {
-  if (!supabase) throw new Error("Supabase is not configured. Please set environment variables.");
-  
   const { data, error } = await supabase
     .from("postcards")
     .select("*")
@@ -50,16 +48,16 @@ export async function getPublicPostcardByToken(shareToken) {
   return data;
 }
 
-export async function getSentPostcards(senderUserId) {
-  if (!supabase) return [];
-  
+export async function getSentPostcards() {
+  const { data: { user } } = await supabase.auth.getUser();
+
   let query = supabase
     .from("postcards")
     .select("*")
     .order("created_at", { ascending: false });
 
-  if (senderUserId) {
-    query = query.eq("sender_user_id", senderUserId);
+  if (user?.email) {
+    query = query.eq("sender_email", user.email);
   }
 
   const { data, error } = await query;
@@ -67,9 +65,22 @@ export async function getSentPostcards(senderUserId) {
   return data ?? [];
 }
 
+export async function getProfileStats(email) {
+  const { data, error } = await supabase
+    .from("postcards")
+    .select("id, status, created_at")
+    .eq("sender_email", email);
+
+  if (error) throw error;
+
+  const total = data?.length ?? 0;
+  const read = data?.filter((p) => p.status === "read").length ?? 0;
+  const sent = data?.filter((p) => p.status === "sent").length ?? 0;
+
+  return { total, read, sent };
+}
+
 export async function markPostcardAsRead(shareToken) {
-  if (!supabase) return;
-  
   const { error } = await supabase
     .from("postcards")
     .update({ status: "read", updated_at: new Date().toISOString() })
