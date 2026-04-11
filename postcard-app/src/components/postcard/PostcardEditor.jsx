@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Input from "./ui/Input";
-import Textarea from "./ui/Textarea";
-import Select from "./ui/Select";
-import Button from "./ui/Button";
+import Input from "../ui/Input";
+import Textarea from "../ui/Textarea";
+import Select from "../ui/Select";
+import Button from "../ui/Button";
 import TemplatePicker from "./TemplatePicker";
 import FontPicker from "./FontPicker";
 import DeliveryPanel from "./DeliveryPanel";
@@ -41,14 +41,12 @@ export default function PostcardEditor({ value, onChange, onSubmit, isSubmitting
         errors={errors}
         onChange={handleFieldChange}
       />
-
       <Input
         label="Title"
         value={value.title}
         onChange={(e) => handleFieldChange("title", e.target.value)}
         placeholder="Give your postcard a poetic title"
       />
-
       <Textarea
         label="Message"
         value={value.content}
@@ -56,33 +54,28 @@ export default function PostcardEditor({ value, onChange, onSubmit, isSubmitting
         error={errors.content}
         placeholder="Write something warm, soft, unforgettable..."
       />
-
       <Input
         label="Signature"
         value={value.signature}
         onChange={(e) => handleFieldChange("signature", e.target.value)}
         placeholder="Love, Elif"
       />
-
       <TemplatePicker
         selectedTemplate={value.templateId}
         onChange={(id) => handleFieldChange("templateId", id)}
       />
-
       <FontPicker
         titleFont={value.titleFont}
         bodyFont={value.bodyFont}
         onTitleFontChange={(id) => handleFieldChange("titleFont", id)}
         onBodyFontChange={(id) => handleFieldChange("bodyFont", id)}
       />
-
       <Select
         label="Text Alignment"
         value={value.textAlign}
         onChange={(e) => handleFieldChange("textAlign", e.target.value)}
         options={TEXT_ALIGN_OPTIONS}
       />
-
       <div className="space-y-2">
         <p className="text-sm font-medium text-stone-700">Custom Background</p>
         <input
@@ -101,7 +94,6 @@ export default function PostcardEditor({ value, onChange, onSubmit, isSubmitting
           </button>
         )}
       </div>
-
       <Button type="submit" className="w-full" disabled={isSubmitting}>
         {isSubmitting ? "Sending postcard..." : "Send postcard link ✦"}
       </Button>
