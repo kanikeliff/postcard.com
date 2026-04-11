@@ -15,6 +15,7 @@
 > Create, preview, and send beautiful postcards via Email, WhatsApp, or SMS — no backend required.
 
 ---
+![Uploading image.png…]()
 
 ## 📁 File Structure
 
