@@ -2,6 +2,9 @@
 
 A web app for designing a digital postcard and sending it to a friend as a private link.
 
+<!-- Add a screenshot: docs/screenshot.png -->
+<!-- Live demo: add the Netlify URL here -->
+
 ## What it does
 
 - **Design:** pick one of 5 templates or upload your own image, choose title and body fonts from 6 options, align the text, sign it, and see a live preview while you edit.
@@ -19,17 +22,19 @@ A web app for designing a digital postcard and sending it to a friend as a priva
 | Hosting | Netlify (SPA redirect in `netlify.toml`) |
 
 ## Project structure
-postcard-app/src/
-├── app/ router and providers
-├── pages/ Home, Create, Sent, Inbox, Profile, Login, Register, PublicPostcard
-├── components/
-│ ├── postcard/ Editor, Preview, TemplatePicker, FontPicker, DeliveryPanel, Card
-│ └── ui/ Button, Input, Select, Textarea, Toast, ProtectedRoute, PageShell
-├── services/ postcardService (Supabase queries), emailService (EmailJS)
-├── context/ AuthContext
-├── hooks/ usePostcardDraft, useToast
-└── lib/ supabase client, validators, share-token helper
 
+```
+postcard-app/src/
+├── app/          router and providers
+├── pages/        Home, Create, Sent, Inbox, Profile, Login, Register, PublicPostcard
+├── components/
+│   ├── postcard/ Editor, Preview, TemplatePicker, FontPicker, DeliveryPanel, Card
+│   └── ui/       Button, Input, Select, Textarea, Toast, ProtectedRoute, PageShell
+├── services/     postcardService (Supabase queries), emailService (EmailJS)
+├── context/      AuthContext
+├── hooks/        usePostcardDraft, useToast
+└── lib/          supabase client, validators, share-token helper
+```
 
 ## Run it locally
 
@@ -39,6 +44,8 @@ npm install
 cp ../.env.example .env      # then fill in your own keys
 npm run dev
 ```
+
+Environment variables:
 
 | Variable | Purpose |
 |---|---|
